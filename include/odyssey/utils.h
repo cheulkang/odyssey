@@ -67,13 +67,29 @@ namespace odyssey{
         return internal;
     }
 
-    double fRand_theta(double min, double max) {
+    static inline double fRand_theta(double min, double max) {
         double f = (double)rand() / RAND_MAX;
         if(max > 2*M_PI){
             return -M_PI + f * (2*M_PI);
         }
         return min + f * (max - min);
     }
+
+    template <typename T>
+    std::vector<T> interpolation(T a, T b, T interval){
+        std::vector<T> values;
+        T tmp = a;
+        while (tmp <= b){
+            values.push_back(tmp);
+            tmp = tmp + interval;
+        }
+
+        if(tmp > b)
+            values.push_back(b);
+
+        return values;
+    }
+
 }
 
 #endif

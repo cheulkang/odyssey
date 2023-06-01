@@ -164,6 +164,7 @@ namespace odyssey
             marker.pose.position.x = state_spheres[i].T_base_.translation().x();
             marker.pose.position.y = state_spheres[i].T_base_.translation().y();
             marker.pose.position.z = state_spheres[i].T_base_.translation().z();
+            marker.pose.orientation.w = 1.0;
 
             // Set the scale of the marker -- 1x1x1 here means 1m on a side
             marker.scale.x = state_spheres[i].rad_ * 2;

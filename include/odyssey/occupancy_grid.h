@@ -5,6 +5,8 @@
 
 #include <ros/ros.h>
 
+#include <odyssey/sphere_representation.h>
+
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/planning_interface/planning_interface.h>
 #include <moveit/planning_scene/planning_scene.h>
@@ -38,7 +40,7 @@ namespace odyssey{
     class OccupancyGrid {
     public:
         OccupancyGrid(std::string fixed_frame_id, double resolution, gridmap3D::Grid3D* occ_gridmap,
-                    std::vector<std::vector<double> > &box_condition, std::vector<std::vector<double> > &spheres,
+                    std::vector<std::vector<double> > &box_condition, std::vector<SphereData> &state_spheres,
                     std::string name_sub_pc, std::string name_pub_occ="");
         ~OccupancyGrid();
 
@@ -61,7 +63,7 @@ namespace odyssey{
         double max_range_;
 
         std::vector<std::vector<double> > &box_condition_;
-        std::vector<std::vector<double> > &spheres_;
+        std::vector<SphereData> &state_spheres_;
 
         void filter_pointcloud(const pcl::PointCloud<pcl::PointXYZ>& pcl_pointcloud, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
         void filter_pointcloud(const sensor_msgs::PointCloud2& src_pc, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);

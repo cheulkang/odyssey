@@ -3,14 +3,14 @@
 namespace odyssey
 {
     OccupancyGrid::OccupancyGrid(std::string fixed_frame_id, double max_range, gridmap3D::Grid3D* occ_gridmap,
-                     std::vector<std::vector<double> > &box_condition, std::vector<std::vector<double> > &spheres,
+                     std::vector<std::vector<double> > &box_condition, std::vector<SphereData> &state_spheres,
                      std::string name_sub_pc, std::string name_pub_occ):
             nh(),
             fixed_frame_id_(fixed_frame_id),
             max_range_(max_range),
             occ_gridmap_(occ_gridmap),
             box_condition_(box_condition),
-            spheres_(spheres)
+            state_spheres_(state_spheres)
     {
         sub_pc_ = new message_filters::Subscriber<sensor_msgs::PointCloud2>(nh, name_sub_pc, 1);
         tf_pc_ = new tf::MessageFilter<sensor_msgs::PointCloud2>(*sub_pc_, tf_listener_, fixed_frame_id, 1);
@@ -124,9 +124,11 @@ namespace odyssey
             }
 
             // sphere condition
-            for (uint i = 0; i < spheres_.size(); i++) {
-                double radius = spheres_[i][0];
-                double l = std::sqrt(std::pow(point.x-spheres_[i][1], 2) + std::pow(point.y-spheres_[i][2], 2) + std::pow(point.z-spheres_[i][3], 2));
+            for (uint i = 0; i < state_spheres_.size(); i++) {
+                double radius = state_spheres_[i].rad_;
+                double l = std::sqrt(std::pow(point.x - state_spheres_[i].T_base_.translation().x(), 2)
+                                    + std::pow(point.y - state_spheres_[i].T_base_.translation().y(), 2)
+                                    + std::pow(point.z - state_spheres_[i].T_base_.translation().z(), 2));
                 if (l < radius){
                     is_available = false;
                     free_pc.push_back(point.x, point.y, point.z);
