@@ -65,6 +65,9 @@ namespace odyssey{
         std::vector<std::vector<double> > &box_condition_;
         std::vector<SphereData> &state_spheres_;
 
+        uint cnt_;
+        bool auto_reset_;
+
         void filter_pointcloud(const pcl::PointCloud<pcl::PointXYZ>& pcl_pointcloud, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
         void filter_pointcloud(const sensor_msgs::PointCloud2& src_pc, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
         void down_sampling(const sensor_msgs::PointCloud2& src_pc, pcl::PointCloud<pcl::PointXYZ>& dst_pc);

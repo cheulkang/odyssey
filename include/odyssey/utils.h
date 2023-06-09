@@ -55,6 +55,7 @@ namespace odyssey{
 
         return internal;
     }
+
     static inline std::vector<float> split_f(std::string str, char delimiter) {
         std::vector<float> internal;
         std::stringstream ss(str);
@@ -67,13 +68,25 @@ namespace odyssey{
         return internal;
     }
 
-    static inline double fRand_theta(double min, double max) {
-        double f = (double)rand() / RAND_MAX;
-        if(max > 2*M_PI){
-            return -M_PI + f * (2*M_PI);
+    static inline std::vector<int> split_i(std::string str, char delimiter) {
+        std::vector<int> internal;
+        std::stringstream ss(str);
+        std::string temp;
+
+        while (getline(ss, temp, delimiter)) {
+            internal.push_back(std::atoi(temp.c_str()));
         }
-        return min + f * (max - min);
+
+        return internal;
     }
+
+//    static inline double fRand_theta(double min, double max) {
+//        double f = (double)rand() / RAND_MAX;
+//        if(max > 2*M_PI){
+//            return -M_PI + f * (2*M_PI);
+//        }
+//        return min + f * (max - min);
+//    }
 
     template <typename T>
     std::vector<T> interpolation(T a, T b, T interval){
@@ -90,6 +103,17 @@ namespace odyssey{
         return values;
     }
 
+    static inline bool random_bool() {
+        return 0 + (rand() % (1 - 0 + 1)) == 1;
+    }
+
+    template <typename T>
+    static inline T random_number(T min, T max){
+        if(min > max)
+            return 0;
+
+        return min + T(rand() / (RAND_MAX / (max - min)));
+    }
 }
 
 #endif

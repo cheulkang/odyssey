@@ -139,7 +139,7 @@ add_library(${PROJECT_NAME}
     src/down_sampling.cpp
     src/fcl_module.cpp
     src/gazebo_control.cpp
-)
+        )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GRIDMAP3D_LIBRARIES})

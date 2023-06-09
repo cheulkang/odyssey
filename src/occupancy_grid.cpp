@@ -15,8 +15,14 @@ namespace odyssey
         sub_pc_ = new message_filters::Subscriber<sensor_msgs::PointCloud2>(nh, name_sub_pc, 1);
         tf_pc_ = new tf::MessageFilter<sensor_msgs::PointCloud2>(*sub_pc_, tf_listener_, fixed_frame_id, 1);
         tf_pc_->registerCallback(boost::bind(&OccupancyGrid::update_occupancy_map, this, _1));
-        if(name_pub_occ != "")
+        if(name_pub_occ != ""){
             pub_occ_ = nh.advertise<sensor_msgs::PointCloud2>(name_pub_occ, 1);
+            auto_reset_ = true;
+        }
+        else{
+            auto_reset_ = false;
+        }
+        cnt_ = 0;
     }
 
     OccupancyGrid::~OccupancyGrid() {
@@ -44,6 +50,16 @@ namespace odyssey
         filter_pointcloud(filtered_pc, sensorToWorldTf, pointcloud, free_pointcloud);
 //    filter_pointcloud(*src_pc, sensorToWorldTf, pointcloud);
 
+        if(auto_reset_ && cnt_ % 20 == 0){
+            for(const auto& cell : *occ_gridmap_->getGrid()) {
+                occ_gridmap_->updateNode(cell.first, false);
+            }
+            cnt_ = 0;
+        }
+        else{
+            cnt_++;
+        }
+
         occ_gridmap_->insertPointCloudRays(pointcloud, origin);
 
         gridmap3D::KeyRay keyray;
@@ -53,10 +69,6 @@ namespace odyssey
                     occ_gridmap_->updateNode(*it, false);
                 }
             }
-        }
-
-        for(const auto& cell : *occ_gridmap_->getGrid()) {
-            occ_gridmap_->updateNode(cell.first, false);
         }
 
         if(pub_occ_.getNumSubscribers() > 0)
