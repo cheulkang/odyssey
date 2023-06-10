@@ -30,7 +30,7 @@ namespace odyssey
 
     void Kinematics::getRandomConfiguration(KDL::JntArray& q){
         for(uint j = 0; j < num_joint_; j++){
-            q(j) = fRand(ll_(j), ul_(j));
+            q(j) = odyssey::random_number(ll_(j), ul_(j));
         }
     }
 
@@ -60,20 +60,8 @@ namespace odyssey
         return !collision_result_.collision;
     }
 
-    double Kinematics::fRand(double min, double max) const {
-        double f = (double)rand() / RAND_MAX;
-        if(max > 2*M_PI){
-            return -M_PI + f * (2*M_PI);
-        }
-        return min + f * (max - min);
-    }
-
     double Kinematics::fRand(int i) const {
-        double f = (double)rand() / RAND_MAX;
-        if(ul_(i) > 2*M_PI){
-            return -M_PI + f * (2*M_PI);
-        }
-        return ll_(i) + f * (ul_(i) - ll_(i));
+        return odyssey::random_number(ll_(i), ul_(i));
     }
 
     bool Kinematics::ikSolverCollFree(const KDL::Frame& p_in, KDL::JntArray& q_out) {
@@ -84,7 +72,7 @@ namespace odyssey
         std::vector<double> conf(num_joint_);
         while(rc < 0){
             for(uint j = 0; j < num_joint_; j++){
-                q_c(j) = fRand(ll_(j), ul_(j));
+                q_c(j) = odyssey::random_number(ll_(j), ul_(j));
             }
             rc = tracik_solver_->CartToJnt(q_c, p_in, q_out);
             for(uint j = 0; j < num_joint_; j++){
@@ -125,7 +113,7 @@ namespace odyssey
         int tried = 0;
         while(rc < 0){
             for(uint j = 0; j < num_joint_; j++){
-                q_c(j) = fRand(ll_(j), ul_(j));
+                q_c(j) = odyssey::random_number(ll_(j), ul_(j));
             }
             rc = tracik_solver_->CartToJnt(q_c, p_in, q_out);
             tried++;

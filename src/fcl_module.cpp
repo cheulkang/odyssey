@@ -86,19 +86,11 @@ namespace odyssey
 
     FCLModule::FCLModule() {
         manager_ = new fcl::DynamicAABBTreeCollisionManager();
-//        manager_self_ = new fcl::DynamicAABBTreeCollisionManager();
     }
 
     FCLModule::~FCLModule() {
         delete manager_;
-//        delete manager_self_;
     }
-
-//    void FCLModule::initSelfObjs(std::vector<fcl::CollisionObject *> objs){
-//        manager_self_->registerObjects(objs);
-//        manager_self_->setup();
-//        manager_self_->update();
-//    }
 
     fcl::CollisionObject* FCLModule::getCollisionBox(double x, double y, double z, double sx, double sy, double sz){
         fcl::Box b(sx, sy, sz);
@@ -138,9 +130,6 @@ namespace odyssey
     void FCLModule::updateOccupancyGrid(std::vector<float> &pos, float res){
         resetCollisionObjs();
 
-        // delete manager_;
-        // manager_ = new fcl::DynamicAABBTreeCollisionManager();
-
         for (uint p = 0; p < pos.size(); p+=3){
             objs_.push_back(getCollisionBox(pos[p], pos[p+1], pos[p+2], res, res, res));
         }
@@ -157,19 +146,12 @@ namespace odyssey
         fcl::CollisionObject *o = new fcl::CollisionObject(geom, pose);
 
         DistanceData dd;
-//        DistanceData dd_self;
-
-//        manager_->distance(o, &dd, defaultDistanceFunction);
-//        manager_self_->distance(o, &dd_self, defaultDistanceFunction);
 
         manager_->distance(o, &dd, signedDistanceFunction);
 
         delete o;
-        // if(dd.result.min_distance == -1 || dd.result.min_distance > dd_self.result.min_distance)
-//        if(dd.result.min_distance > dd_self.result.min_distance)
-//            return dd_self.result.min_distance;
-//        else
-            return dd.result.min_distance;
+
+        return dd.result.min_distance;
     }
 
     bool FCLModule::checkCollision(fcl::CollisionObject *o) {
@@ -204,16 +186,11 @@ namespace odyssey
         fcl::CollisionObject *o = new fcl::CollisionObject(geom, pose);
 
         DistanceData dd;
-        // DistanceData dd_self;
 
         manager_->distance(o, &dd, signedDistanceFunction);
-        // manager_self_->distance(o, &dd_self, defaultDistanceFunction);
 
         delete o;
-        // if(dd.result.min_distance == -1 || dd.result.min_distance > dd_self.result.min_distance)
-        // if(dd.result.min_distance > dd_self.result.min_distance)
-        // return dd_self.result.min_distance;
-        // else
+
         return dd.result.min_distance;
     }
 

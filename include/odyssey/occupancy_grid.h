@@ -44,7 +44,7 @@ namespace odyssey{
                     std::string name_sub_pc, std::string name_pub_occ="");
         ~OccupancyGrid();
 
-        void update_occupancy_map(const sensor_msgs::PointCloud2ConstPtr& src_pc);
+        void updateOccupancyMap(const sensor_msgs::PointCloud2ConstPtr& src_pc);
 
     protected:
         // Node handle
@@ -68,10 +68,10 @@ namespace odyssey{
         uint cnt_;
         bool auto_reset_;
 
-        void filter_pointcloud(const pcl::PointCloud<pcl::PointXYZ>& pcl_pointcloud, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
-        void filter_pointcloud(const sensor_msgs::PointCloud2& src_pc, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
-        void down_sampling(const sensor_msgs::PointCloud2& src_pc, pcl::PointCloud<pcl::PointXYZ>& dst_pc);
-        void publish_occupied_cells();
+        void filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& pcl_pointcloud, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
+        void filterPointcloud(const sensor_msgs::PointCloud2& src_pc, const tf::StampedTransform& transform, gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc);
+        void downSampling(const sensor_msgs::PointCloud2& src_pc, pcl::PointCloud<pcl::PointXYZ>& dst_pc);
+        void publishOccupiedCells();
     };
 }
 

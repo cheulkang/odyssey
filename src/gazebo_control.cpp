@@ -21,7 +21,7 @@ namespace odyssey{
     }
 
     // model control
-    bool GazeboControl::spawn_model(std::string &name, std::string &model_path, geometry_msgs::Pose &model_pose){
+    bool GazeboControl::spawnModel(std::string &name, std::string &model_path, geometry_msgs::Pose &model_pose){
         gazebo_msgs::SpawnModel srv_sm;
 
         TiXmlDocument xml_in(model_path);
@@ -41,7 +41,7 @@ namespace odyssey{
         }
     }
 
-    bool GazeboControl::spawn_model(std::string &name, std::ostringstream &model_xml, geometry_msgs::Pose &model_pose){
+    bool GazeboControl::spawnModel(std::string &name, std::ostringstream &model_xml, geometry_msgs::Pose &model_pose){
         gazebo_msgs::SpawnModel srv_sm;
 
         srv_sm.request.model_name.assign(name);
@@ -56,7 +56,7 @@ namespace odyssey{
         }
     }
 
-    bool GazeboControl::delete_model(std::string &name){
+    bool GazeboControl::deleteModel(std::string &name){
         gazebo_msgs::DeleteModel srv_dm;
         srv_dm.request.model_name.assign(name);
 
@@ -68,7 +68,7 @@ namespace odyssey{
         }
     }
 
-    bool GazeboControl::set_model_state(std::string &name, geometry_msgs::Pose p, geometry_msgs::Twist t){
+    bool GazeboControl::setModelState(std::string &name, geometry_msgs::Pose p, geometry_msgs::Twist t){
         gazebo_msgs::SetModelState srv_sms;
         gazebo_msgs::ModelState ms;
 
@@ -87,7 +87,7 @@ namespace odyssey{
         }
     }
 
-    bool GazeboControl::get_model_state(gazebo_msgs::GetModelState &srv_gms){
+    bool GazeboControl::getModelState(gazebo_msgs::GetModelState &srv_gms){
         if(cli_get_model_state_.call(srv_gms)){
             return true;
         }
@@ -96,7 +96,7 @@ namespace odyssey{
         }
     }
 
-    bool GazeboControl::set_link_properties(gazebo_msgs::SetLinkProperties &srv_slp){
+    bool GazeboControl::setLinkProperties(gazebo_msgs::SetLinkProperties &srv_slp){
         if(cli_set_link_properties_.call(srv_slp)){
             return true;
         }
@@ -105,7 +105,7 @@ namespace odyssey{
         }
     }
 
-    bool GazeboControl::get_link_properties(gazebo_msgs::GetLinkProperties &srv_glp){
+    bool GazeboControl::getLinkProperties(gazebo_msgs::GetLinkProperties &srv_glp){
         if(cli_get_link_properties_.call(srv_glp)){
             return true;
         }

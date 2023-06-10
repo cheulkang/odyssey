@@ -25,13 +25,13 @@ namespace odyssey{
         GazeboControl();
         ~GazeboControl();
 
-        bool spawn_model(std::string &name, std::string &model_path, geometry_msgs::Pose &model_pose);
-        bool spawn_model(std::string &name, std::ostringstream &model_xml, geometry_msgs::Pose &model_pose);
-        bool delete_model(std::string &name);
-        bool set_model_state(std::string &name, geometry_msgs::Pose p, geometry_msgs::Twist t);
-        bool get_model_state(gazebo_msgs::GetModelState &srv_gms);
-        bool get_link_properties(gazebo_msgs::GetLinkProperties &srv_glp);
-        bool set_link_properties(gazebo_msgs::SetLinkProperties &srv_slp);
+        bool spawnModel(std::string &name, std::string &model_path, geometry_msgs::Pose &model_pose);
+        bool spawnModel(std::string &name, std::ostringstream &model_xml, geometry_msgs::Pose &model_pose);
+        bool deleteModel(std::string &name);
+        bool setModelState(std::string &name, geometry_msgs::Pose p, geometry_msgs::Twist t);
+        bool getModelState(gazebo_msgs::GetModelState &srv_gms);
+        bool getLinkProperties(gazebo_msgs::GetLinkProperties &srv_glp);
+        bool setLinkProperties(gazebo_msgs::SetLinkProperties &srv_slp);
     private:
         ros::NodeHandle nh_;
         ros::ServiceClient cli_spawn_model_;

@@ -38,25 +38,11 @@ namespace odyssey
         marker.ns = "basic_shapes";
         marker.id = num_figure_++;
 
-        // Set the marker type.  Initially this is CUBE, and cycles between that and SPHERE, ARROW, and CYLINDER
-        // Cycle between different shapes
-
-//        switch (shape)
-//        {
-//            case
-//                break;
-//            case visualization_msgs::Marker::SPHERE:
-//                shape = visualization_msgs::Marker::ARROW;
-//                break;
-//            case visualization_msgs::Marker::ARROW:
-//                shape = visualization_msgs::Marker::CYLINDER;
-//                break;
-//            case visualization_msgs::Marker::CYLINDER:
-//                shape = visualization_msgs::Marker::CUBE;
-//                break;
-//        }
-
         marker.type = shape;
+//        visualization_msgs::Marker::CYLINDER
+//        visualization_msgs::Marker::ARROW
+//        visualization_msgs::Marker::CYLINDER
+//        visualization_msgs::Marker::CUBE
 
         // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
         marker.action = visualization_msgs::Marker::ADD;

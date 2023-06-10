@@ -6,6 +6,7 @@
 #include <kdl/chainiksolverpos_nr_jl.hpp>
 #include <trac_ik/trac_ik.hpp>
 #include <moveit/planning_scene/planning_scene.h>
+#include <odyssey/utils.h>
 
 namespace odyssey
 {
@@ -16,7 +17,6 @@ namespace odyssey
                 const std::string base_link, const std::string tip_link);
         virtual ~Kinematics(){};
 
-        double fRand(double min, double max) const;
         double fRand(int i) const;
         void getRandomConfiguration(KDL::JntArray& q);
         void setCollisionChecker();

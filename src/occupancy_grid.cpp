@@ -14,7 +14,7 @@ namespace odyssey
     {
         sub_pc_ = new message_filters::Subscriber<sensor_msgs::PointCloud2>(nh, name_sub_pc, 1);
         tf_pc_ = new tf::MessageFilter<sensor_msgs::PointCloud2>(*sub_pc_, tf_listener_, fixed_frame_id, 1);
-        tf_pc_->registerCallback(boost::bind(&OccupancyGrid::update_occupancy_map, this, _1));
+        tf_pc_->registerCallback(boost::bind(&OccupancyGrid::updateOccupancyMap, this, _1));
         if(name_pub_occ != ""){
             pub_occ_ = nh.advertise<sensor_msgs::PointCloud2>(name_pub_occ, 1);
             auto_reset_ = true;
@@ -30,7 +30,7 @@ namespace odyssey
         delete tf_pc_;
     }
 
-    void OccupancyGrid::update_occupancy_map(const sensor_msgs::PointCloud2ConstPtr& src_pc) {
+    void OccupancyGrid::updateOccupancyMap(const sensor_msgs::PointCloud2ConstPtr& src_pc) {
         // Pose of the sensor frame
         tf::StampedTransform sensorToWorldTf;
         try{
@@ -43,11 +43,11 @@ namespace odyssey
 
         gridmap3D::point3d origin(sensorToWorldTf.getOrigin().x(), sensorToWorldTf.getOrigin().y(), sensorToWorldTf.getOrigin().z());
         pcl::PointCloud<pcl::PointXYZ> filtered_pc;
-        down_sampling(*src_pc, filtered_pc);
+        downSampling(*src_pc, filtered_pc);
 
         gridmap3D::Pointcloud pointcloud;
         gridmap3D::Pointcloud free_pointcloud;
-        filter_pointcloud(filtered_pc, sensorToWorldTf, pointcloud, free_pointcloud);
+        filterPointcloud(filtered_pc, sensorToWorldTf, pointcloud, free_pointcloud);
 //    filter_pointcloud(*src_pc, sensorToWorldTf, pointcloud);
 
         if(auto_reset_ && cnt_ % 20 == 0){
@@ -72,10 +72,10 @@ namespace odyssey
         }
 
         if(pub_occ_.getNumSubscribers() > 0)
-            publish_occupied_cells();
+            publishOccupiedCells();
     }
 
-    void OccupancyGrid::down_sampling(const sensor_msgs::PointCloud2& src_pc, pcl::PointCloud<pcl::PointXYZ>& dst_pc){
+    void OccupancyGrid::downSampling(const sensor_msgs::PointCloud2& src_pc, pcl::PointCloud<pcl::PointXYZ>& dst_pc){
         pcl::PCLPointCloud2::Ptr cloudPtr(new pcl::PCLPointCloud2);
         pcl_conversions::toPCL(src_pc, *cloudPtr);
         pcl::PCLPointCloud2::Ptr cloudfiltered(new pcl::PCLPointCloud2);
@@ -88,7 +88,7 @@ namespace odyssey
         pcl::fromPCLPointCloud2(*cloudfiltered, dst_pc);
     }
 
-    void OccupancyGrid::filter_pointcloud(const pcl::PointCloud<pcl::PointXYZ>& pcl_pointcloud, const tf::StampedTransform& transform,
+    void OccupancyGrid::filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& pcl_pointcloud, const tf::StampedTransform& transform,
                                     gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc) {
         pcl::PointCloud<pcl::PointXYZ> pcl_pointcloud_in_sensor_coordinate;
         pcl::PointCloud<pcl::PointXYZ> pcl_pointcloud_free_in_sensor_coordinate;
@@ -155,16 +155,16 @@ namespace odyssey
         }
     }
 
-    void OccupancyGrid::filter_pointcloud(const sensor_msgs::PointCloud2& src_pc, const tf::StampedTransform& transform,
+    void OccupancyGrid::filterPointcloud(const sensor_msgs::PointCloud2& src_pc, const tf::StampedTransform& transform,
                                     gridmap3D::Pointcloud& dst_pc, gridmap3D::Pointcloud& free_pc) {
         // in sensor coordinate ========================================================================================
         pcl::PointCloud<pcl::PointXYZ> pcl_pointcloud;
         pcl::fromROSMsg(src_pc, pcl_pointcloud);
 
-        filter_pointcloud(pcl_pointcloud, transform, dst_pc, free_pc);
+        filterPointcloud(pcl_pointcloud, transform, dst_pc, free_pc);
     }
 
-    void OccupancyGrid::publish_occupied_cells() {
+    void OccupancyGrid::publishOccupiedCells() {
         pcl::PointCloud<pcl::PointXYZ> pcl_pointcloud;
         for(auto it = occ_gridmap_->getGrid()->begin(); it != occ_gridmap_->getGrid()->end(); it++) {
             if(occ_gridmap_->isNodeOccupied(it->second)) {
