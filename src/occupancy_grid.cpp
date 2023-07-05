@@ -62,14 +62,14 @@ namespace odyssey
 
         occ_gridmap_->insertPointCloudRays(pointcloud, origin);
 
-        gridmap3D::KeyRay keyray;
-        for(auto i = 0; i < free_pointcloud.size(); i++) {
-            if(occ_gridmap_->computeRayKeys(origin, free_pointcloud[i], keyray)) {
-                for(auto it = keyray.begin(); it != keyray.end(); it++) {
-                    occ_gridmap_->updateNode(*it, false);
-                }
-            }
-        }
+//        gridmap3D::KeyRay keyray;
+//        for(auto i = 0; i < free_pointcloud.size(); i++) {
+//            if(occ_gridmap_->computeRayKeys(origin, free_pointcloud[i], keyray)) {
+//                for(auto it = keyray.begin(); it != keyray.end(); it++) {
+//                    occ_gridmap_->updateNode(*it, false);
+//                }
+//            }
+//        }
 
         if(pub_occ_.getNumSubscribers() > 0)
             publishOccupiedCells();

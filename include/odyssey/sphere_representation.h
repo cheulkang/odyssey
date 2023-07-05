@@ -93,84 +93,84 @@ namespace odyssey{
         return sd;
     }
 
-    static inline std::vector<SphereData> iiwa_sphere_representation() {
+    static inline std::vector<SphereData> iiwa_sphere_representation(float c = 0.0) {
         std::vector<SphereData> sd;
 
         SphereData s0_0;
         s0_0.num_parent_joint_ = 0;
-        s0_0.rad_ = 0.15;
+        s0_0.rad_ = 0.15 + c;
         s0_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, -0.075));
         sd.push_back(s0_0);
 
         SphereData s0_1;
         s0_1.num_parent_joint_ = 0;
-        s0_1.rad_ = 0.125;
+        s0_1.rad_ = 0.125 + c;
         s0_1.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0.0, -0.04, 0.1));
         sd.push_back(s0_1);
 
         SphereData s1_0;
         s1_0.num_parent_joint_ = 1;
-        s1_0.rad_ = 0.125;
+        s1_0.rad_ = 0.125 + c;
         s1_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0));
         sd.push_back(s1_0);
 
         SphereData s1_1;
         s1_1.num_parent_joint_ = 1;
-        s1_1.rad_ = 0.1;
+        s1_1.rad_ = 0.1 + c;
         s1_1.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0.1, 0.02));
         sd.push_back(s1_1);
 
         SphereData s2_0;
         s2_0.num_parent_joint_ = 2;
-        s2_0.rad_ = 0.125;
+        s2_0.rad_ = 0.125 + c;
         s2_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0));
         sd.push_back(s2_0);
 
         SphereData s2_1;
         s2_1.num_parent_joint_ = 2;
-        s2_1.rad_ = 0.1;
+        s2_1.rad_ = 0.1 + c;
         s2_1.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0.05, 0.1));
         sd.push_back(s2_1);
 
         SphereData s3_0;
         s3_0.num_parent_joint_ = 3;
-        s3_0.rad_ = 0.125;
+        s3_0.rad_ = 0.125 + c;
         s3_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0));
         sd.push_back(s3_0);
 
         SphereData s3_1;
         s3_1.num_parent_joint_ = 3;
-        s3_1.rad_ = 0.1;
+        s3_1.rad_ = 0.1 + c;
         s3_1.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0.0, 0.1, 0.05));
         sd.push_back(s3_1);
 
         SphereData s4_0;
         s4_0.num_parent_joint_ = 4;
-        s4_0.rad_ = 0.125;
+        s4_0.rad_ = 0.125 + c;
         s4_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0));
         sd.push_back(s4_0);
 
         SphereData s4_1;
         s4_1.num_parent_joint_ = 4;
-        s4_1.rad_ = 0.1;
+        s4_1.rad_ = 0.1 + c;
         s4_1.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0.05, 0.1));
         sd.push_back(s4_1);
 
         SphereData s5_0;
         s5_0.num_parent_joint_ = 5;
-        s5_0.rad_ = 0.125;
+        s5_0.rad_ = 0.125 + c;
         s5_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0.0, 0.0, 0.05));
         sd.push_back(s5_0);
 
         SphereData s6_0;
         s6_0.num_parent_joint_ = 6;
-        s6_0.rad_ = 0.1;
+        s6_0.rad_ = 0.1 + c;
         s6_0.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0));
         sd.push_back(s6_0);
 
         SphereData s6_1;
         s6_1.num_parent_joint_ = 6;
-        s6_1.rad_ = 0.09;
+        s6_1.rad_ = 0.09 + c;
         s6_1.T_par_ = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0.1));
         sd.push_back(s6_1);
 

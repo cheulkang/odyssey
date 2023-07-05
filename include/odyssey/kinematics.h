@@ -31,9 +31,16 @@ namespace odyssey
         void vikSolver(const KDL::JntArray& q, const KDL::Twist& delta_twist, KDL::JntArray& delta_q);
         void getJacobian(const KDL::JntArray& q, KDL::Jacobian& jac);
         uint getDoF();
+        double manipPenalty(const KDL::JntArray& arr);
+        double manipValue1(const KDL::JntArray& arr);
+        double manipValue2(const KDL::JntArray& arr);
+        double manipValue3(const KDL::JntArray& arr);
+        double extendManipValue(const KDL::JntArray& arr);
+        double jointPositionLimitPotentialFunction(double value, uint i);
     private:
         KDL::Chain chain_;
         KDL::JntArray ll_, ul_; //lower joint limits, upper joint limits
+        std::vector<KDL::BasicJointType> types_;
         uint num_joint_;
         std::string planning_group_;
         planning_scene::PlanningSceneConstPtr planning_scene_;

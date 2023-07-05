@@ -25,6 +25,20 @@ namespace odyssey
         vik_solver_.reset(new KDL::ChainIkSolverVel_pinv(chain_)); // PseudoInverse vel solver
         jacsolver_.reset(new KDL::ChainJntToJacSolver(chain_));
 
+        for (uint i = 0; i < chain_.segments.size(); i++)
+        {
+            std::string type = chain_.segments[i].getJoint().getTypeName();
+            if (type.find("Rot") != std::string::npos) {
+                if (ul_(types_.size()) >= std::numeric_limits<float>::max() &&
+                    ll_(types_.size()) <= std::numeric_limits<float>::lowest())
+                    types_.push_back(KDL::BasicJointType::Continuous);
+                else
+                    types_.push_back(KDL::BasicJointType::RotJoint);
+            }
+            else if (type.find("Trans") != std::string::npos)
+                types_.push_back(KDL::BasicJointType::TransJoint);
+        }
+
         max_tried_ = 30;
     }
 
@@ -146,5 +160,90 @@ namespace odyssey
 
     void Kinematics::getJacobian(const KDL::JntArray& q, KDL::Jacobian& jac){
         jacsolver_->JntToJac(q, jac);
+    }
+
+    double Kinematics::manipPenalty(const KDL::JntArray& arr)
+    {
+        double penalty = 1.0;
+        for (uint i = 0; i < arr.data.size(); i++)
+        {
+            if (types_[i] == KDL::BasicJointType::Continuous)
+                continue;
+            double range = ul_(i) - ll_(i);
+            penalty *= ((arr(i) - ll_(i)) * (ul_(i) - arr(i)) / (range * range));
+        }
+        return std::max(0.0, 1.0 - exp(-1 * penalty)) * 10000;
+    }
+
+    double Kinematics::manipValue1(const KDL::JntArray& arr)
+    {
+        KDL::Jacobian jac(arr.data.size());
+
+        jacsolver_->JntToJac(arr, jac);
+
+        Eigen::JacobiSVD<Eigen::MatrixXd> svdsolver(jac.data);
+        Eigen::MatrixXd singular_values = svdsolver.singularValues();
+
+        double error = 1.0;
+        for (unsigned int i = 0; i < singular_values.rows(); ++i)
+            error *= singular_values(i, 0);
+        return error;
+    }
+
+    double Kinematics::manipValue2(const KDL::JntArray& arr)
+    {
+        KDL::Jacobian jac(arr.data.size());
+
+        jacsolver_->JntToJac(arr, jac);
+
+        Eigen::JacobiSVD<Eigen::MatrixXd> svdsolver(jac.data);
+        Eigen::MatrixXd singular_values = svdsolver.singularValues();
+
+        return singular_values.minCoeff() / singular_values.maxCoeff();
+    }
+
+    double Kinematics::manipValue3(const KDL::JntArray& arr)
+    {
+        KDL::Jacobian jac(arr.data.size());
+
+        jacsolver_->JntToJac(arr, jac);
+
+        return std::abs(std::sqrt((jac.data * jac.data.transpose()).determinant()));
+    }
+
+    double Kinematics::jointPositionLimitPotentialFunction(double value, uint i){
+        if(value == ll_(i)){
+            return 0.0;
+        }
+
+        return std::abs( (2 * value - ul_(i) - ll_(i)) / ( 4 * std::pow(ul_(i) - value, 2)) );
+    }
+
+    double Kinematics::extendManipValue(const KDL::JntArray& arr){
+        KDL::Jacobian jac(arr.data.size());
+        jacsolver_->JntToJac(arr, jac);
+
+        // compute L(arr)
+        KDL::JntArray penalties(num_joint_);
+        for (uint i = 0; i < arr.data.size(); i++)
+        {
+            if (types_[i] == KDL::BasicJointType::Continuous){
+                penalties(i) = 1.0;
+            }
+            else{
+                penalties(i) = 1.0 / std::sqrt(1 + jointPositionLimitPotentialFunction(arr(i), i));
+            }
+        }
+
+        for(uint i = 0; i < 6; i++){
+            for (uint j = 0; j < num_joint_; j++){
+                jac.data(i, j) *= penalties(j);
+            }
+        }
+
+        Eigen::JacobiSVD<Eigen::MatrixXd> svdsolver(jac.data);
+        Eigen::MatrixXd singular_values = svdsolver.singularValues();
+
+        return singular_values.minCoeff() / singular_values.maxCoeff();
     }
 }
