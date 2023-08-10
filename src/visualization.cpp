@@ -27,7 +27,7 @@ namespace odyssey
         line_list_.colors.clear();
     }
 
-    void Visualization::visualizeFigure(uint32_t shape, geometry_msgs::Pose pose, geometry_msgs::Vector3 scale){
+    void Visualization::visualizeFigure(uint32_t shape, geometry_msgs::Pose pose, geometry_msgs::Vector3 scale, std_msgs::ColorRGBA color){
         visualization_msgs::Marker marker;
         // Set the frame ID and timestamp.  See the TF tutorials for information on these.
         marker.header.frame_id = frame_id_;
@@ -54,10 +54,7 @@ namespace odyssey
         marker.scale = scale;
 
         // Set the color -- be sure to set alpha to something non-zero!
-        marker.color.r = 0.0f;
-        marker.color.g = 1.0f;
-        marker.color.b = 0.0f;
-        marker.color.a = 1.0;
+        marker.color = color;
 
         marker.lifetime = ros::Duration();
 

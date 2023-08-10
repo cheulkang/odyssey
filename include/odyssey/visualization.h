@@ -26,7 +26,7 @@ namespace odyssey
         void addLineForVisualization(geometry_msgs::Point p1, geometry_msgs::Point p2, int color);
         void visualizeLine();
 
-        void visualizeFigure(uint32_t shape, geometry_msgs::Pose pose, geometry_msgs::Vector3 scale);
+        void visualizeFigure(uint32_t shape, geometry_msgs::Pose pose, geometry_msgs::Vector3 scale, std_msgs::ColorRGBA color);
         void visualizeStateSpheres(std::vector<SphereData> &state_spheres);
     private:
         int num_joints_;

@@ -91,14 +91,15 @@ namespace odyssey{
     template <typename T>
     std::vector<T> interpolation(T a, T b, T interval){
         std::vector<T> values;
+
         T tmp = a;
-        while (tmp <= b){
+        for (; tmp <= b; tmp += interval){
             values.push_back(tmp);
-            tmp = tmp + interval;
         }
 
-        if(tmp > b)
-            values.push_back(b);
+//        if(tmp != b){
+//            values.push_back(tmp);
+//        }
 
         return values;
     }

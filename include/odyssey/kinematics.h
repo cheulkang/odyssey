@@ -37,10 +37,11 @@ namespace odyssey
         double manipValue3(const KDL::JntArray& arr);
         double extendManipValue(const KDL::JntArray& arr);
         double jointPositionLimitPotentialFunction(double value, uint i);
-    private:
-        KDL::Chain chain_;
+
         KDL::JntArray ll_, ul_; //lower joint limits, upper joint limits
         std::vector<KDL::BasicJointType> types_;
+    private:
+        KDL::Chain chain_;
         uint num_joint_;
         std::string planning_group_;
         planning_scene::PlanningSceneConstPtr planning_scene_;
